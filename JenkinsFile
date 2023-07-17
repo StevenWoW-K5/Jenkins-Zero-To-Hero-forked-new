@@ -67,7 +67,7 @@ pipeline {
                 //def oldPath = 'image: rockuk/ultimate-cicd:[\w.-]+'
                 //def newPath = 'image: rockuk/ultimate-cicd:${BUILD_NUMBER}'
 
-                def oldPath = 'image: rockuk/ultimate-cicd:[\\w.-]+'
+                def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                 def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
 
                 sh '''
@@ -75,8 +75,8 @@ pipeline {
                     git config user.name "StevenWoW-K5"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     
-                    sed -i 's@${oldPath}@${newPath}@g' java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
                     
+                    sed -i "s@${oldPath}@${newPath}@g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
                     git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
