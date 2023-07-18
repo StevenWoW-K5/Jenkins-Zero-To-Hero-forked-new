@@ -9,7 +9,8 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        git branch: 'main', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git'
+        //git branch: 'main', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git'
+        checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git']])
       }
     }
     stage('Build and Test') {
