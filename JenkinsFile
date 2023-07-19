@@ -6,6 +6,32 @@ pipeline {
     }
   }
   stages {
+
+    stage('curltest'){
+    steps{
+                script {
+
+                def jstring = '{"one":1, "two":2}'
+                def jobj = readJSON text: jstring
+                echo jstring
+                echo jobj.toString()
+
+
+
+                    def sonarqubeApiUrl = "http://203.33.207.10:9000/api/qualitygates/project_status?projectKey=com.k5:spring-boot-demo"
+                    def sonarqubeResponse = sh(script: "curl -s $sonarqubeApiUrl", returnStdout: true)
+                    echo sonarqubeResponse
+                    def sonarqubeStatus = readJSON(text: sonarqubeResponse).projectStatus.status
+                    echo sonarqubeStatus
+
+                    if (sonarqubeStatus == 'OK') {
+                        echo "SonarQube analysis passed!"
+                    } else {
+                        error "SonarQube analysis failed!"
+                    }
+                }
+    }
+    }
     stage('Checkout') {
       steps {
         sh 'echo passed'
