@@ -20,7 +20,13 @@ pipeline {
         }
       }
   stage('test'){
-  steps{
+            environment {
+                GIT_REPO_NAME = "Jenkins-Zero-To-Hero-forked"
+                GIT_USER_NAME = "StevenWoW-K5"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+
         script {
                   def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                   def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
@@ -41,7 +47,7 @@ pipeline {
                       git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                   '''
                   }
-
+}
   }
   }
 
