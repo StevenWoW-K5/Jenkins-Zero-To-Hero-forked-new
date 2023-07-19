@@ -33,7 +33,7 @@ pipeline {
 
 
                       //sed -i 's@"image: rockuk/ultimate-cicd:[\\w.-]+"@"image: rockuk/ultimate-cicd:${BUILD_NUMBER}"@g' "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
-                      sed -i -E 's/image: rockuk\/ultimate-cicd:([0-9.]+)/image: rockuk\/ultimate-cicd:78/g' "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
+                      sed -i -E 's/image: rockuk\\/ultimate-cicd:([0-9.]+)/image: rockuk\\/ultimate-cicd:78/g' "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
 
                       cat "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
                       git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
