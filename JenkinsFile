@@ -6,33 +6,6 @@ pipeline {
     }
   }
   stages {
-
-    stage('curltest'){
-    steps{
-                script {
-
-                def jstring = '{"one":1, "two":2}'
-                def jobj = readJSON text: jstring
-                echo jstring
-                echo jobj.toString()
-
-
-
-                    def sonarqubeApiUrl = "http://203.33.207.10:9000/api/qualitygates/project_status?projectKey=com.k5:spring-boot-demo"
-
-                    def sonarqubeResponse = sh(script: "curl -u admin:${sonarpwd} -s '$sonarqubeApiUrl'", returnStdout: true)
-                    echo sonarqubeResponse
-                    def sonarqubeStatus = readJSON(text: sonarqubeResponse).projectStatus.status
-                    echo sonarqubeStatus
-
-                    if (sonarqubeStatus == 'OK') {
-                        echo "SonarQube analysis passed!"
-                    } else {
-                        error "SonarQube analysis failed!"
-                    }
-                }
-    }
-    }
     stage('Checkout') {
       steps {
         sh 'echo passed'
@@ -94,7 +67,7 @@ pipeline {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 //def oldPath = 'image: rockuk/ultimate-cicd:[\w.-]+'
                 //def newPath = 'image: rockuk/ultimate-cicd:${BUILD_NUMBER}'
-script {
+            script {
                 def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                 def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
 
@@ -102,15 +75,15 @@ script {
                     git config user.email "stevenwu@163.com"
                     git config user.name "StevenWoW-K5"
                     BUILD_NUMBER=${BUILD_NUMBER}
-                    
-                    
+
+
                     sed -i "s@${oldPath}@${newPath}@g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
                     git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
-}
+                }
             }
         }
     }
