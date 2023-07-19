@@ -9,7 +9,7 @@ pipeline {
   stage('Checkout') {
         steps {
           sh 'echo passed'
-          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a92c760d-4cac-4776-a983-9db580649407', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+          checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a92c760d-4cac-4776-a983-9db580649407', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
           sh 'echo passed111'
           //checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git']])
         }
