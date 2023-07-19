@@ -30,7 +30,7 @@ pipeline {
         script {
                   def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                   def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
-                  checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'localtest', url: 'https://github.com/StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+                  checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'd2a2e2bd-f276-480b-af7e-09db43e5cacc', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
 
                   sh '''
                       git config user.email "stevenwu@163.com"
