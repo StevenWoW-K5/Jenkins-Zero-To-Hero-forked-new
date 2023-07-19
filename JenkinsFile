@@ -21,7 +21,7 @@ pipeline {
       }
   stage('test'){
             environment {
-                GIT_REPO_NAME = "Jenkins-Zero-To-Hero-forked"
+                GIT_REPO_NAME = "Jenkins-Zero-To-Hero-forked-Deployment"
                 GIT_USER_NAME = "StevenWoW-K5"
             }
             steps {
@@ -30,7 +30,7 @@ pipeline {
         script {
                   def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                   def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
-                  checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+                  checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'localtest', url: 'https://github.com/StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
 
                   sh '''
                       git config user.email "stevenwu@163.com"
