@@ -56,7 +56,7 @@ pipeline {
         // Retrieve SonarQube analysis status
             script {
                 def sonarqubeApiUrl = "http://203.33.207.10:9000/api/qualitygates/project_status?projectKey=com.k5:spring-boot-demo"
-                def sonarqubeResponse = sh(script: 'curl -u admin:${sonarpwd} -s ${sonarqubeApiUrl}, returnStdout: true)
+                def sonarqubeResponse = sh(script: 'curl -u admin:${sonarpwd} -s ${sonarqubeApiUrl}', returnStdout: true)
                 def sonarqubeStatus = readJSON(text: sonarqubeResponse).projectStatus.status
 
                 if (sonarqubeStatus == 'OK') {
