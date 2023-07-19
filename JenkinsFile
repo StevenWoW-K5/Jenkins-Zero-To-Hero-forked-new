@@ -9,7 +9,7 @@ pipeline {
   stage('test'){
   steps{
         script {
-                  def oldPath = "image: rockuk/ultimate-cicd:[\w.-]+"
+                  def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
                   def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
 
 
