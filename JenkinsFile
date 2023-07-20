@@ -103,9 +103,9 @@ pipeline {
                               BUILD_NUMBER=${BUILD_NUMBER}
                               ls -ltr
 
-                              sed -i -E 's/image: rockuk\\/ultimate-cicd:([0-9.]+)/image: rockuk\\/ultimate-cicd:38/g' "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
+                              sed -i -E 's/image: rockuk\\/ultimate-cicd:([0-9.]+)/image: rockuk\\/ultimate-cicd:38/g' "spring-boot-app-manifests/deployment.yml"
 
-                              git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+                              git add spring-boot-app-manifests/deployment.yml
                               git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                               git push
                           '''
