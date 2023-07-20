@@ -34,7 +34,11 @@ pipeline {
                               BUILD_NUMBER=${BUILD_NUMBER}
                               ls -ltr
 
+                              cat spring-boot-app-manifests/deployment.yml
+                              echo "hello"
+
                               sed -i -E "s/image: rockuk\\/ultimate-cicd:([0-9.]+)/image: rockuk\\/ultimate-cicd:${BUILD_NUMBER}/g" "spring-boot-app-manifests/deployment.yml"
+                              cat spring-boot-app-manifests/deployment.yml
                               git add spring-boot-app-manifests/deployment.yml
                               git commit -m "Update deployment image to version ${BUILD_NUMBER}"
                               git push
