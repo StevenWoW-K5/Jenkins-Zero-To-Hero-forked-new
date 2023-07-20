@@ -17,7 +17,7 @@ pipeline {
                       GIT_USER_NAME = "StevenWoW-K5"
                   }
                   steps {
-                      withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                      //withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                           //def oldPath = 'image: rockuk/ultimate-cicd:[\w.-]+'
                           //def newPath = 'image: rockuk/ultimate-cicd:${BUILD_NUMBER}'
                       script {
@@ -41,11 +41,14 @@ pipeline {
                               cat spring-boot-app-manifests/deployment.yml
                               git add spring-boot-app-manifests/deployment.yml
                               git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                              //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+
+                              git push origin HEAD:main
+
                           '''
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                           }
-                      }
+                      //}
 
                   }
               }
