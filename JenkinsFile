@@ -6,9 +6,9 @@ pipeline {
     }
   }
 
-      options {
+      //options {
           //skipDefaultCheckout() // Skip the default checkout step in Declarative Pipelines
-      }
+      //}
   stages {
           stage('Hello11') {
               steps {
