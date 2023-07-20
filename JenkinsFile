@@ -6,56 +6,10 @@ pipeline {
     }
   }
   stages {
-  stage('Checkout') {
-        steps {
-          sh 'echo passed'
-
-          sh 'echo passed111'
-          checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git']])
-          sh 'echo passed222'
-          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
-          //checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
-        sh 'echo passed333'
-        }
+          stage('Hello') {
+              steps {
+                  checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+              }
+          }
       }
-      stage('Build and Test') {
-        steps {
-          sh 'ls -ltr'
-          // build the project and create a JAR file
-          sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app'
-        }
-      }
-  stage('test'){
-            environment {
-                GIT_REPO_NAME = "Jenkins-Zero-To-Hero-forked-Deployment"
-                GIT_USER_NAME = "StevenWoW-K5"
-            }
-            steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-
-        script {
-                  def oldPath = "image: rockuk/ultimate-cicd:[\\w.-]+"
-                  def newPath = "image: rockuk/ultimate-cicd:${BUILD_NUMBER}"
-                  checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'a92c760d-4cac-4776-a983-9db580649407', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
-
-                  sh '''
-                      git config user.email "stevenwu@163.com"
-                      git config user.name "StevenWoW-K5"
-                      BUILD_NUMBER=18
-
-                      ls -ltr
-                      cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
-                      sed -i -E 's/image: rockuk\\/ultimate-cicd:([0-9.]+)/image: rockuk\\/ultimate-cicd:38/g' "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
-
-                      cat "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
-                      git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                      git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                      git push
-                  '''
-                  }
-}
-  }
-  }
-
-  }
 }
