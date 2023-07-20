@@ -1,4 +1,3 @@
-#language=Grovvy
 pipeline {
   agent {
     docker {
