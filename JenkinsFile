@@ -13,7 +13,8 @@ pipeline {
           sh 'echo passed111'
           checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git']])
           sh 'echo passed222'
-          checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
+          //checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: '8c0b4de7-ab96-4d0e-9eec-a561ee4a5b6e', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked-Deployment.git']])
         sh 'echo passed333'
         }
       }
