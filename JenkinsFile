@@ -17,7 +17,7 @@ pipeline {
                       GIT_USER_NAME = "StevenWoW-K5"
                   }
                   steps {
-                      //withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                      withCredentials([string(credentialsId: 'github-deploy-new', variable: 'GITHUB_TOKEN')]) {
                           //def oldPath = 'image: rockuk/ultimate-cicd:[\w.-]+'
                           //def newPath = 'image: rockuk/ultimate-cicd:${BUILD_NUMBER}'
                       script {
@@ -46,12 +46,14 @@ pipeline {
                               git remote -v
                               echo "hello111"
 
-                              git push origin HEAD:main
+                              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
 
                           '''
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                          //git push origin HEAD:main
+                          //GitHub Personal Access Token (PAT) Required: Some remote Git services, like GitHub, may require you to use a personal access token (PAT) instead of an SSH key for authentication. Make sure you have generated a PAT and use it instead of an SSH key if required.
                           }
-                      //}
+                      }
 
                   }
               }
