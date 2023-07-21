@@ -46,10 +46,11 @@ pipeline {
                               git remote -v
                               echo "hello111"
 
-                              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/Jenkins-Zero-To-Hero-forked-Deployment HEAD:main
+                              git push origin HEAD:main
 
 
                           '''
+                          //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/Jenkins-Zero-To-Hero-forked-Deployment HEAD:main  --worked
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                           //git push origin HEAD:main
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
