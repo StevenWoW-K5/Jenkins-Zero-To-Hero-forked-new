@@ -11,6 +11,69 @@ pipeline {
       //}
   stages {
 
+            stage('Checkout') {
+                            steps {
+                              sh 'echo passed'
+                              //git branch: 'main', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git'
+                              sh 'pwd'
+                              checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshGithub', url: 'git@github.com:StevenWoW-K5/Jenkins-Zero-To-Hero-forked.git']])
+                              sh 'pwd'
+                              sh 'ls -ltr -a'
+                            }
+              }
+              stage('Build and Test') {
+                steps {
+                sh 'pwd'
+                  sh 'ls -ltr -a'
+                  // build the project and create a JAR file
+                  sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
+                }
+              }
+              stage('Static Code Analysis') {
+                environment {
+                  SONAR_URL = "http://203.33.207.10:9000"
+                }
+                steps {
+                  withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                   sh 'pwd'
+                   sh 'ls -ltr -a'
+                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                  // Retrieve SonarQube analysis status
+                      script {
+                          def sonarqubeApiUrl = "http://203.33.207.10:9000/api/qualitygates/project_status?projectKey=com.k5:spring-boot-demo"
+                          def sonarqubeResponse = sh(script: "curl -u admin:${sonarpwd} -s '$sonarqubeApiUrl'", returnStdout: true)
+                          def sonarqubeStatus = readJSON(text: sonarqubeResponse).projectStatus.status
+
+                          if (sonarqubeStatus == 'OK') {
+                              echo "SonarQube analysis passed!"
+                          } else {
+                              error "SonarQube analysis failed!"
+                          }
+                      }
+                  }
+                }
+              }
+              stage('Build and Push Docker Image') {
+                environment {
+                  DOCKER_IMAGE = "rockuk/ultimate-cicd:${BUILD_NUMBER}"
+                  // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+                  REGISTRY_CREDENTIALS = credentials('docker-cred')
+                }
+                steps {
+                  script {
+                  sh 'pwd'
+                  sh 'ls -ltr -a'
+                      sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+                      def dockerImage = docker.image("${DOCKER_IMAGE}")
+                      docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
+                          dockerImage.push()
+                      }
+                  }
+                }
+              }
+
+
+
               stage('Update Deployment File') {
                   environment {
                       GIT_REPO_NAME = "Jenkins-Zero-To-Hero-forked"
@@ -32,23 +95,14 @@ pipeline {
                               git config user.email "stevenwu@163.com"
                               git config user.name "StevenWoW-K5"
                               BUILD_NUMBER=${BUILD_NUMBER}
-                              ls -ltr
-
+                              ls -ltr -a
                               cat spring-boot-app-manifests/deployment.yml
-                              echo "hello"
-
                               sed -i -E "s/image: rockuk\\/ultimate-cicd:([a-zA-Z0-9.]+)/image: rockuk\\/ultimate-cicd:${BUILD_NUMBER}/g" "spring-boot-app-manifests/deployment.yml"
                               cat spring-boot-app-manifests/deployment.yml
                               git add spring-boot-app-manifests/deployment.yml
                               git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-
-                              echo "hello222"
                               git remote -v
-                              echo "hello111"
-
-                              git push origin HEAD:main
-
-
+                              git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/Jenkins-Zero-To-Hero-forked-Deployment HEAD:main
                           '''
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/Jenkins-Zero-To-Hero-forked-Deployment HEAD:main  --worked
                           //git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
